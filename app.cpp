@@ -176,11 +176,11 @@ bool ReadFile(string filename, List* list)
 	if (!read.fail())
 	{
 		dupcount = 0;
-
+		char tmp;
 		while (!read.eof())
 		{
 			read >> temp; // read from file
-			read >> temp;
+			read >> tmp;
 			read >> temp;
 			read >> student.id; // read into LibStudent struct
 			getline(read, temp, '=');
@@ -191,17 +191,20 @@ bool ReadFile(string filename, List* list)
 			getline(read, temp, '=');
 			read >> student.phone_no;
 
-			if (!Redundant(student_list, student)) // check duplicate
+			if (tmp == '=')
 			{
-				student_list.insert(1, student); // insert into list, better performance compare insert to the last node
-				count++;
-				stunum++; // count student number
+				if (!Redundant(student_list, student)) // check duplicate
+				{
+					student_list.insert(1, student); // insert into list, better performance compare insert to the last node
+					count++;
+					stunum++; // count student number
+				}
+				else if (Redundant(student_list, student) == true)
+				{
+					dupcount++;
+				}
+
 			}
-			else if (Redundant(student_list, student) == true)
-			{
-				dupcount++;
-			}
-			
 		}
 		read.close();
 
@@ -496,7 +499,7 @@ bool InsertBook(string filename, List* list)
 			for (int i = 0; i < publisher_length; i++)
 			{
 
-				if (book[tempo].publisher[i] == '-')
+				if (book[tempo].publisher[i] == '_')
 				{
 					book[tempo].publisher[i] = ' ';
 				}
@@ -977,10 +980,7 @@ bool displayWarnedStudent(List* list, List* type1, List* type2)
 
 			if (due_count > 2) //if at least 3 book overdue more than or equal to 10 days
 			{
-				if (!Redundant(list2, gg))
-				{
-					list1.insert(1, gg);
-				}
+				list1.insert(1, gg);
 			}
 
 			
